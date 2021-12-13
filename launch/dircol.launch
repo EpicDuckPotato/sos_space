@@ -1,0 +1,18 @@
+<launch>
+  <rosparam file="$(find sos_space)/config/controller.yaml"/>
+  <rosparam file="$(find sos_space)/config/env.yaml"/>
+  <rosparam file="$(find sos_space)/config/limits.yaml"/>
+  <node name="test_node" pkg="sos_space" type="dircol_node.py" output="screen"/>
+  <param name="robot_description" textfile="$(find sos_space)/urdf/robot.urdf" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+    <remap from="joint_states" to="/space_robot/fbk/joint_state" />
+  </node>
+  <param name="vm_description" textfile="$(find sos_space)/urdf/vm.urdf" />
+  <node name="vm_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+    <remap from="robot_description" to="vm_description" />
+    <remap from="joint_states" to="/space_robot/fbk/joint_state" />
+  </node>
+  <node name="tf_node" pkg="sos_space" type="tf_node.py"/>
+  <arg name="rvizconfig" default="$(find sos_space)/rviz/space_robot.rviz" />
+  <node name="mpc_rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+</launch>

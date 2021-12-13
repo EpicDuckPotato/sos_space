@@ -1,0 +1,3 @@
+joint_angle_lower_limits: [-1.5708, -1.5708, -1.5708]
+joint_angle_upper_limits: [1.5708, 1.5708, 1.5708]
+joint_torque_limits: [20, 20, 20]

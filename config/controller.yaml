@@ -1,0 +1,4 @@
+dt: 0.05
+planning_steps: 50
+planner_integration: 'euler'
+constraint_polishing: True

@@ -1,0 +1,131 @@
+<?xml version="1.0" ?>
+<robot name="ur5">
+<mujoco>
+  <compiler fusestatic="false" inertiafromgeom="false" />
+</mujoco>
+
+<!-- ********** KINEMATIC PROPERTIES (JOINTS) ********** -->
+<joint name="joint1" type="revolute">
+<parent link="vm_base_link"/>
+  <child link="vm_link1"/>
+  <origin rpy="0.0 0.0 0.0" xyz="0.125 0.0 0.0"/>
+  <axis xyz="0 0 1"/>
+  <dynamics damping="0" friction="0"/>
+  <limit effort="150.0" lower="-3.14" upper="3.14" velocity="2.208932"/>
+</joint>
+<joint name="joint2" type="revolute">
+  <parent link="vm_link1"/>
+  <child link="vm_link2"/>
+  <origin rpy="0.0 0.0 0.0" xyz="0.375 0.0 0.0"/>
+  <axis xyz="0 0 1"/>
+  <dynamics damping="0" friction="0"/>
+  <limit effort="150.0" lower="-3.14" upper="3.14" velocity="2.208932"/>
+</joint>
+<joint name="joint3" type="revolute">
+  <parent link="vm_link2"/>
+  <child link="vm_link3"/>
+  <origin rpy="0.0 0.0 0.0" xyz="0.625 0.0 0.0"/>
+  <axis xyz="0 0 1"/>
+  <dynamics damping="0" friction="0"/>
+  <limit effort="150.0" lower="-3.14" upper="3.14" velocity="2.208932"/>
+</joint>
+<joint name="vm_ee_tip_joint" type="fixed">
+  <origin rpy="0 0 0" xyz="0.875 0 0"/>
+  <parent link="vm_link3"/>
+  <child link="vm_ee_tip"/>
+</joint>
+<!-- ********** INERTIAL PROPERTIES (LINKS) ********** -->
+<link name="vm_base_link">
+  <visual>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <box size="0.25 0.25 0.25"/>
+    </geometry>
+    <material name="black">
+      <color rgba="0 0 0 1"/>
+    </material>
+  </visual>
+  <inertial>
+    <mass value="10.0"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+    <inertia ixx="1.67" ixy="0.0" ixz="0.0"
+             iyy="1.67" iyz="0.0" izz="1.67"/>
+  </inertial>
+  <collision>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <box size="0.25 0.25 0.25"/>
+    </geometry>
+  </collision>
+</link>
+<link name="vm_link1">
+  <visual>
+    <origin rpy="0 1.570796325 0" xyz="0.1875 0 0"/>
+    <geometry>
+      <cylinder length="0.375" radius="0.05"/>
+    </geometry>
+    <material name="white">
+      <color rgba="1 1 1 1"/>
+    </material>
+  </visual>
+  <inertial>
+    <mass value="10"/>
+    <origin rpy="0 0 0" xyz="0.5 0.0 0.0"/>
+    <inertia ixx="0.833" ixy="0.0" ixz="0.0"
+             iyy="0.833" iyz="0.0" izz="0.0125"/>
+  </inertial>
+  <collision>
+    <origin rpy="0 1.570796325 0" xyz="0.1875 0 0"/>
+    <geometry>
+      <cylinder length="0.375" radius="0.05"/>
+    </geometry>
+  </collision>
+</link>
+<link name="vm_link2">
+  <visual>
+    <origin rpy="0 1.570796325 0" xyz="0.3125 0 0"/>
+    <geometry>
+      <cylinder length="0.625" radius="0.05"/>
+    </geometry>
+    <material name="white">
+      <color rgba="1 1 1 1"/>
+    </material>
+  </visual>
+  <inertial>
+    <mass value="10"/>
+    <origin rpy="0 0 0" xyz="0.5 0.0 0.0"/>
+    <inertia ixx="0.833" ixy="0.0" ixz="0.0"
+             iyy="0.833" iyz="0.0" izz="0.0125"/>
+  </inertial>
+  <collision>
+    <origin rpy="0 1.570796325 0" xyz="0.3125 0 0"/>
+    <geometry>
+      <cylinder length="0.625" radius="0.05"/>
+    </geometry>
+  </collision>
+</link>
+<link name="vm_link3">
+  <visual>
+    <origin rpy="0 1.570796325 0" xyz="0.4375 0 0"/>
+    <geometry>
+      <cylinder length="0.875" radius="0.05"/>
+    </geometry>
+    <material name="white">
+      <color rgba="1 1 1 1"/>
+    </material>
+  </visual>
+  <inertial>
+    <mass value="10"/>
+    <origin rpy="0 0 0" xyz="0.5 0.0 0.0"/>
+    <inertia ixx="0.833" ixy="0.0" ixz="0.0"
+             iyy="0.833" iyz="0.0" izz="0.0125"/>
+  </inertial>
+  <collision>
+    <origin rpy="0 1.570796325 0" xyz="0.4375 0 0"/>
+    <geometry>
+      <cylinder length="0.875" radius="0.05"/>
+    </geometry>
+  </collision>
+</link>
+<link name="vm_ee_tip"/>
+</robot>
