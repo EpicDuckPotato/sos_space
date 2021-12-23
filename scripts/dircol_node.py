@@ -16,8 +16,6 @@ from scipy.spatial.transform import Rotation as R
 from arm import dynamics, linearize_dynamics, ee_fk, ee_jacobian
 from dircol_problem import DircolProblem
 from fk_dircol_problem import FKDircolProblem
-from alfddpPlanner import ALFDDPPlanner
-from funnelOptimizer2 import FunnelOptimizer
 import crocoddyl as croc
 
 np.set_printoptions(linewidth=np.inf)
@@ -100,12 +98,8 @@ robot = RobotWrapper.BuildFromURDF(urdf_file, root_joint=pin.JointModelFreeFlyer
 robot.model.gravity.setZero()
 model = robot.model
 
-funnel_optimizer = FunnelOptimizer(model, dt, ts, us, xs, goal_pos)
-funnel_optimizer.find_rho()
-
 data = pin.Data(model)
 
-planner = ALFDDPPlanner(urdf_file, dt, planner_integration, joint_angle_lower_limits, joint_angle_upper_limits, joint_torque_limits, True)
 for x in xs:
   point = fk(x[:3 + arm_dynamics.num_rotary])
   plan_marker.points.append(Point(point[0], point[1], 0))
@@ -140,8 +134,30 @@ while not rospy.is_shutdown():
   action_model.calc(action_data, x, u)
   x = np.copy(action_data.xnext)
 
-  odom, joints = planner.get_msgs(x)
+  odom = Odometry()
+  odom.pose.pose.position.x = x[0]
+  odom.pose.pose.position.y = x[1]
+  odom.pose.pose.position.z = x[2]
+  odom.pose.pose.orientation.x = x[3]
+  odom.pose.pose.orientation.y = x[4]
+  odom.pose.pose.orientation.z = x[5]
+  odom.pose.pose.orientation.w = x[6]
+  odom.twist.twist.linear.x = x[model.nq]
+  odom.twist.twist.linear.y = x[model.nq + 1]
+  odom.twist.twist.linear.z = x[model.nq + 2]
+  odom.twist.twist.angular.x = x[model.nq + 3]
+  odom.twist.twist.angular.y = x[model.nq + 4]
+  odom.twist.twist.angular.z = x[model.nq + 5]
   odom.header.stamp = rospy.Time.now()
+
+  joints = JointState()
+  for j in range(arm_dynamics.num_rotary):
+    name = model.names[j + 2]
+    joints.name.append(name)
+    jidx = model.getJointId(name) - 2
+    joints.position.append(x[7 + jidx])
+    joints.velocity.append(x[model.nq + 6 + jidx])
+
   joints.header.stamp = rospy.Time.now()
   odom_pub.publish(odom)
   joints_pub.publish(joints)

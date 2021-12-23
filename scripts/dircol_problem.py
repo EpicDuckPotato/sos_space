@@ -167,12 +167,29 @@ class DircolProblem(object):
 
     return np.array(rows), np.array(cols)
 
-  '''
   def hessianstructure(self):
     """Returns the row and column indices for non-zero vales of the
     Hessian."""
-    return None
+    rows = []
+    cols = []
+    for step in range(self.steps + 1):
+      for row in range(self.vars_per_step):
+        for col in range(self.vars_per_step):
+          rows.append(self.vars_per_step*step + row)
+          cols.append(self.vars_per_step*step + col)
 
+        if step < self.steps:
+          for col in range(self.vars_per_step):
+            rows.append(self.vars_per_step*step + row)
+            cols.append(self.vars_per_step*(step + 1) + col)
+
+          for col in range(self.vars_per_step):
+            rows.append(self.vars_per_step*(step + 1) + row)
+            cols.append(self.vars_per_step*step + col)
+
+    return np.array(rows), np.array(cols)
+
+  '''
   def hessian(self, x, lagrange, obj_factor):
     """Returns the non-zero values of the Hessian."""
     return None
